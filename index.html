@@ -9,22 +9,23 @@
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             display: flex;
+            flex-direction: column; /* เปลี่ยนเป็นแนวตั้งเพื่อให้เครดิตอยู่ด้านล่าง */
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #1e1e1e; /* ปรับพื้นหลังเป็นสีเทาเข้ม (Dark Mode) */
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
         }
 
         .calculator {
-            background-color: #2d3436; /* สีพื้นหลังเครื่องคิดเลขเข้มขึ้นเล็กน้อย */
+            background-color: #2d3436;
             padding: 25px;
             border-radius: 25px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             width: 100%;
-            max-width: 400px; /* ขยายให้กว้างขึ้นเล็กน้อยรับปุ่มเยอะขึ้น */
+            max-width: 400px;
         }
 
         #display {
@@ -45,8 +46,8 @@
         /* จัด Grid ปุ่มให้เป็นระเบียบ */
         .buttons {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 คอลัมน์เท่าๆ กัน */
-            gap: 12px; /* ช่องว่างระหว่างปุ่ม */
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
         }
 
         button {
@@ -55,7 +56,7 @@
             border: none;
             border-radius: 12px;
             cursor: pointer;
-            background-color: #636e72; /* สีปุ่มตัวเลขทั่วไป */
+            background-color: #636e72;
             color: white;
             transition: all 0.2s ease;
             font-weight: 500;
@@ -78,8 +79,8 @@
         }
         
         .btn-sci {
-             background-color: #0984e3; /* สีฟ้าสำหรับปุ่มวิทย์ */
-             font-size: 0.9rem; /* ลดขนาดฟอนต์ปุ่มวิทย์ลงนิดหน่อย */
+             background-color: #0984e3;
+             font-size: 0.9rem;
         }
 
         .btn-clear {
@@ -89,12 +90,23 @@
 
         .btn-equals {
             background-color: #00b894;
-            grid-column: span 2; /* ปุ่มเท่ากับยาว 2 ช่อง */
+            grid-column: span 2;
             font-size: 1.5rem;
         }
 
         .btn-zero {
-            grid-column: span 2; /* ปุ่มศูนย์ยาว 2 ช่อง */
+            grid-column: span 2;
+        }
+
+        /* --- ส่วนเครดิตผู้จัดทำ --- */
+        .footer-credit {
+            margin-top: 25px; /* เว้นระยะห่างจากเครื่องคิดเลข */
+            color: #b2bec3;   /* สีตัวอักษรสีเทาอ่อน */
+            font-size: 1rem;
+            font-weight: bold;
+            letter-spacing: 1px; /* เพิ่มระยะห่างตัวอักษรนิดหน่อย */
+            opacity: 0.8;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* เพิ่มเงาให้ตัวหนังสือลอยเด่น */
         }
     </style>
 </head>
@@ -141,6 +153,8 @@
         </div>
     </div>
 
+    <div class="footer-credit">Create By koomean</div>
+
     <script>
         // --- JavaScript Logic ---
         const display = document.getElementById('display');
@@ -162,26 +176,23 @@
                 let expression = display.value;
 
                 // แปลงสัญลักษณ์ให้เป็น JavaScript Math Functions
-                // หมายเหตุ: sin/cos/tan ใน JS ใช้หน่วยเป็น Radians ไม่ใช่ Degrees
                 expression = expression.replace(/×/g, '*');
                 expression = expression.replace(/÷/g, '/');
-                expression = expression.replace(/\^/g, '**'); // ใช้ ** แทนการยกกำลัง
+                expression = expression.replace(/\^/g, '**'); 
                 expression = expression.replace(/√/g, 'Math.sqrt');
                 expression = expression.replace(/sin/g, 'Math.sin');
                 expression = expression.replace(/cos/g, 'Math.cos');
                 expression = expression.replace(/tan/g, 'Math.tan');
-                expression = expression.replace(/log/g, 'Math.log10'); // ใช้ log ฐาน 10
+                expression = expression.replace(/log/g, 'Math.log10'); 
                 expression = expression.replace(/π/g, 'Math.PI');
                 expression = expression.replace(/e/g, 'Math.E');
 
                 // คำนวณ
                 const result = eval(expression);
                 
-                // จัดการกรณีผลลัพธ์เป็นทศนิยมยาวเหยียด หรือไม่ใช่ตัวเลข
                 if (isNaN(result) || !isFinite(result)) {
-                     display.value = 'Error';
+                      display.value = 'Error';
                 } else {
-                     // ปัดเศษถ้าทศนิยมยาวเกินไป (ป้องกันล้นจอ)
                     display.value = parseFloat(result.toFixed(8)).toString();
                 }
 
